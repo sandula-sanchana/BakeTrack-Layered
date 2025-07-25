@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<StackPane fx:id="apLoadingScreen" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #2C3E50;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.ijse.baketrack.controller.loadingScreenController">
+
+
+    <ImageView fitHeight="1080.0" fitWidth="1920.0" preserveRatio="false">
+        <image>
+            <Image url="@../images/bi_astract.png" />
+        </image>
+    </ImageView>
+
+
+    <Rectangle fill="#F5F5DC" height="1080.0" opacity="0.8" width="1920.0" />
+
+
+    <VBox alignment="CENTER" spacing="60.0">
+
+        <StackPane prefHeight="250.0" prefWidth="1863.0" style="-fx-background-color: #34495E; -fx-background-radius: 20;">
+            <effect>
+                <DropShadow color="#00000033" offsetX="5.0" offsetY="5.0" radius="15.0" />
+            </effect>
+            <ImageView fitHeight="200.0" fitWidth="180.0" preserveRatio="true" scaleX="1.4" scaleY="1.4">
+                <image>
+                    <Image url="@../images/logo_no_bg.png" />
+                </image>
+            </ImageView>
+        </StackPane>
+
+
+        <ProgressIndicator fx:id="spinner" prefHeight="100.0" prefWidth="100.0" scaleX="2.0" scaleY="2.0" scaleZ="2.0" />
+
+
+        <Label fx:id="lbl" text="Loading BakeTrack..." textFill="#34495E">
+            <font>
+                <Font name="System Bold" size="36.0" />
+            </font>
+        </Label>
+    </VBox>
+
+</StackPane>
