@@ -1,7 +1,7 @@
 package edu.ijse.BakeTrack.dao.custom.impl;
 import edu.ijse.BakeTrack.db.DBobject;
 
-import edu.ijse.BakeTrack.entity.AttendanceCount;
+import edu.ijse.BakeTrack.entity.AttendanceCountE;
 import edu.ijse.BakeTrack.dao.custom.AttendanceDAO;
 import edu.ijse.BakeTrack.dao.SqlExecute;
 import edu.ijse.BakeTrack.entity.Attendance;
@@ -155,8 +155,8 @@ public class AttendanceDAOImpl implements AttendanceDAO {
         return "";
     }
 
-    public List<AttendanceCount> getAttendanceEachDay(){
-        List<AttendanceCount> attendanceDtos=new ArrayList<>();
+    public List<AttendanceCountE> getAttendanceEachDay(){
+        List<AttendanceCountE> attendanceDtos=new ArrayList<>();
         try {
             String sql="SELECT attend_date, COUNT(*) AS count\n" +
                     "FROM attendance\n" +
@@ -168,7 +168,7 @@ public class AttendanceDAOImpl implements AttendanceDAO {
             while (rs.next()){
                    int count=rs.getInt("count");
                    LocalDate date=rs.getDate("attend_date").toLocalDate();
-                   attendanceDtos.add(new AttendanceCount(count,date));
+                   attendanceDtos.add(new AttendanceCountE(count,date));
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

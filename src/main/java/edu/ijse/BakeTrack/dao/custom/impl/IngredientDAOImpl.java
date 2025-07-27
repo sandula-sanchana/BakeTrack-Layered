@@ -11,6 +11,8 @@ import edu.ijse.BakeTrack.dao.custom.IngredientDAO;
 import edu.ijse.BakeTrack.db.DBobject;
 import edu.ijse.BakeTrack.dao.SqlExecute;
 import edu.ijse.BakeTrack.entity.Ingredient;
+import edu.ijse.BakeTrack.tm.IngredientTM;
+import javafx.collections.ObservableList;
 
 public class IngredientDAOImpl implements IngredientDAO {
      
@@ -119,6 +121,15 @@ public class IngredientDAOImpl implements IngredientDAO {
                 }
             }
         }
+    }
+
+    public boolean deductIngredientStock(ObservableList<IngredientTM> ingredients) throws SQLException {
+        String sql = "UPDATE ingredient SET stock_amount = (stock_amount - ?) WHERE ingredient_id = ?";
+        for (IngredientTM ingredient : ingredients) {
+            boolean success = SqlExecute.SqlExecute(sql, ingredient.getTotal_amount_need(), ingredient.getIngredient_id());
+            if (!success) return false;
+        }
+        return true;
     }
 
 

@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
+import edu.ijse.BakeTrack.dao.SqlExecute;
 import edu.ijse.BakeTrack.dao.custom.PaymentDAO;
 import edu.ijse.BakeTrack.db.DBobject;
 import edu.ijse.BakeTrack.entity.Payment;
@@ -216,6 +217,11 @@ public class PaymentDAOImplT implements PaymentDAO {
         }
         return countMap;
 
+    }
+
+    public boolean insertPendingPayment(int orderId, double price) throws SQLException {
+        String sql = "INSERT INTO payments (order_id, price, payment_method, payment_date, status) VALUES (?, ?, ?, ?, ?)";
+        return SqlExecute.SqlExecute(sql, orderId, price, null, null, "pending");
     }
 
 }

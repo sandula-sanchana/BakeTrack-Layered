@@ -13,10 +13,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EmployeeDAOImplj implements EmployeeDAO {
+public class EmployeeDAOImpl implements EmployeeDAO {
     private Connection connection;
 
-    public EmployeeDAOImplj() throws ClassNotFoundException,SQLException{
+    public EmployeeDAOImpl() throws ClassNotFoundException,SQLException{
         this.connection= DBobject.getInstance().getConnection();
     }
 
@@ -82,32 +82,7 @@ public class EmployeeDAOImplj implements EmployeeDAO {
         return getall;
     }
 
-    public ArrayList<Employee> getAllAvailableAndNonAssinEmp() throws SQLException {
-        ArrayList<Employee> arrayList=new ArrayList<>();
-        String searchSQl= "SELECT * \n" +
-                "FROM employee e \n" +
-                "JOIN attendance a ON e.employee_id = a.employee_id \n" +
-                "LEFT JOIN delivery d \n" +
-                "  ON e.employee_id = d.employee_id \n" +
-                "  AND d.delivery_date = CURRENT_DATE \n" +
-                "WHERE a.status = 'present' \n" +
-                "AND a.attend_date = CURRENT_DATE \n" +
-                "AND e.roles = 'Mobile_sellers' \n" +
-                "AND d.employee_id IS NULL;";
 
-        ResultSet resultSet= null;
-        try {
-            resultSet = SqlExecute.SqlExecute(searchSQl);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        while (resultSet.next()){
-            arrayList.add(new Employee( resultSet.getInt("employee_id"),resultSet.getString("emp_name"),resultSet.getString("emp_address"),resultSet.getDouble("salary"), resultSet.getString("contact_no"),resultSet.getString("roles")));
-        }
-
-       return arrayList;
-    }
 
 
     public String update(Employee employeeDto) throws SQLException {

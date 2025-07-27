@@ -13,11 +13,11 @@ import java.util.ArrayList;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-public class DeliveryDAOImplT implements DeliveryDAO {
+public class DeliveryDAOImpl implements DeliveryDAO {
 
     private Connection connection;
 
-    public DeliveryDAOImplT() {
+    public DeliveryDAOImpl() {
         try {
             this.connection = DBobject.getInstance().getConnection();
         } catch (Exception e) {
@@ -81,6 +81,24 @@ public class DeliveryDAOImplT implements DeliveryDAO {
     }
 
     @Override
+    public int addDelivery(Delivery dto) throws SQLException {
+        String sql = "INSERT INTO delivery (vehicle_id, employee_id, delivery_date, area) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setInt(1, dto.getVehicleID());
+            ps.setNull(2, -1);
+            ps.setDate(3, Date.valueOf(dto.getDeliveryDate()));
+            ps.setString(4, dto.getDeliveryArea());
+
+            ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            return -1;
+        }
+    }
+
+    @Override
     public int getVehicleIDbyDelID(int delivery_id) throws SQLException {
         String sql = "SELECT vehicle_id FROM delivery WHERE delivery_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -113,75 +131,7 @@ public class DeliveryDAOImplT implements DeliveryDAO {
         return getall;
     }
 
-    public String setDelivery(Delivery deliveryDto,String orderID) throws SQLException {
-        try {
-            connection.setAutoCommit(false);
 
-            String addSql = "INSERT INTO delivery (vehicle_id,employee_id, delivery_date, area) VALUES (?, ?, ?,?)";//here i set the delivery to delivery table :)
-            //next i will update the delivery id in order table
-            try {
-                PreparedStatement statement = connection.prepareStatement(addSql, Statement.RETURN_GENERATED_KEYS);
-                statement.setInt(1, deliveryDto.getVehicleID());
-                statement.setNull(2,-1);
-                statement.setDate(3, Date.valueOf(deliveryDto.getDeliveryDate()));
-                statement.setString(4, deliveryDto.getDeliveryArea());
-                statement.executeUpdate();
-
-                ResultSet gen_key=statement.getGeneratedKeys();
-
-                if( gen_key.next()){
-                    try {
-                        int key=gen_key.getInt(1);
-                        String orderUpdateSql="UPDATE orders SET delivery_id=?,status=? WHERE order_id=?";//delivery id and order status updating here
-                        PreparedStatement orderStatement=connection.prepareStatement(orderUpdateSql);
-                        orderStatement.setInt(1,key);
-                        orderStatement.setString(2,"in transit");
-                        orderStatement.setInt(3,Integer.parseInt(orderID));
-
-                        if( orderStatement.executeUpdate()>0){
-                            String vehicleAvailableSql="UPDATE vehicle SET status=? WHERE vehicle_id=?";
-                            try {
-                                PreparedStatement vehicleStatement=connection.prepareStatement(vehicleAvailableSql);
-                                vehicleStatement.setString(1,"not available");
-                                vehicleStatement.setInt(2,deliveryDto.getVehicleID());
-
-                                if(vehicleStatement.executeUpdate()>0){
-                                    connection.commit();
-                                    return "setDelivery Successfully done";
-                                }else{
-                                    connection.rollback();
-                                    return "Vehicle status status Update error";
-                                }
-                            } catch (SQLException e) {
-                                throw new RuntimeException(e);
-                            }
-
-
-                        }else{
-                            connection.rollback();
-                            return "delivery id and status on order Table Update error";
-                        }
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    } catch (NumberFormatException e) {
-                        throw new RuntimeException(e);
-                    }
-                }else {
-                    connection.rollback();
-                    return "set Delivery to table error";
-                }
-            } catch (SQLException e) {
-                System.err.println(e.getMessage());
-                throw new RuntimeException(e);
-            }
-
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }finally {
-            connection.setAutoCommit(true);
-        }
-    }
     public String setEmployeeForDelivery(int del_id,int emp_id){
         Boolean done= null;
         try {

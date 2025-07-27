@@ -5,10 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.ijse.BakeTrack.dao.custom.ProductDAO;
 import edu.ijse.BakeTrack.db.DBobject;
 import edu.ijse.BakeTrack.dao.SqlExecute;
+import edu.ijse.BakeTrack.entity.OrderDetail;
 import edu.ijse.BakeTrack.entity.Product;
 
 public class ProductDAOImpl implements ProductDAO {
@@ -53,6 +55,16 @@ public class ProductDAOImpl implements ProductDAO {
             return rs.getInt("count");
         }
         return -1;
+    }
+
+    @Override
+    public boolean updateQuantitiesAfterOrder(List<OrderDetail> orderDetails) throws SQLException {
+        String sql = "UPDATE product SET total_quantity=(total_quantity - ?) WHERE product_id = ?";
+        for (OrderDetail dto : orderDetails) {
+            boolean updated = SqlExecute.SqlExecute(sql, dto.getQuantity(), dto.getProductID());
+            if (!updated) return false;
+        }
+        return true;
     }
 
     public String update(Product productDto) throws SQLException {

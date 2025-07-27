@@ -6,7 +6,7 @@ import java.util.List;
 
 import edu.ijse.BakeTrack.dao.CrudDAO;
 import edu.ijse.BakeTrack.entity.Attendance;
-import edu.ijse.BakeTrack.entity.AttendanceCount;
+import edu.ijse.BakeTrack.entity.AttendanceCountE;
 
 public interface AttendanceDAO extends CrudDAO<Attendance> {
 
@@ -19,5 +19,5 @@ public interface AttendanceDAO extends CrudDAO<Attendance> {
 
     double getEmployeeTotalOTHours(int employeeId, int month, int year) throws SQLException;
 
-    List<AttendanceCount> getAttendanceEachDay() throws SQLException;
+    List<AttendanceCountE> getAttendanceEachDay() throws SQLException;
 }

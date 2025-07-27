@@ -1,6 +1,5 @@
 package edu.ijse.BakeTrack.dao;
 
-import edu.ijse.BakeTrack.dao.custom.QueryDAO;
 import edu.ijse.BakeTrack.dao.custom.impl.*;
 
 import java.sql.SQLException;
@@ -48,7 +47,7 @@ public class DAOFactory {
                 return new CustomerDAOImpl();
 
             case EMPLOYEE:
-                return new EmployeeDAOImplj();
+                return new EmployeeDAOImpl();
 
             case PAYMENT:
                 return new PaymentDAOImplT();
@@ -63,7 +62,7 @@ public class DAOFactory {
                 return new IngredientDAOImpl();
 
             case ORDER:
-                return new OrdersDAOImplT();
+                return new OrdersDAOImpl();
 
             case ORDER_DETAIL:
                 return new OrderDetailDAOImpl();
@@ -72,7 +71,7 @@ public class DAOFactory {
                 return new VehicleDAOImpl();
 
             case DELIVERY:
-                return new DeliveryDAOImplT();
+                return new DeliveryDAOImpl();
 
             case PAYROLL:
                 return new PayrollDAOImpl();

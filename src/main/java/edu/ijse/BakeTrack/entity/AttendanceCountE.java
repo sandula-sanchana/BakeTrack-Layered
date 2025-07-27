@@ -2,11 +2,11 @@ package edu.ijse.BakeTrack.entity;
 
 import java.time.LocalDate;
 
-public class AttendanceCount {
+public class AttendanceCountE {
     private int count;
     private LocalDate date;
 
-    public AttendanceCount(int count, LocalDate date) {
+    public AttendanceCountE(int count, LocalDate date) {
         this.count = count;
         this.date = date;
     }

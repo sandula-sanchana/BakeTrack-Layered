@@ -13,10 +13,11 @@ import javafx.collections.ObservableList;
 
 public interface OrderDAO extends CrudDAO<Order> {
 
-    String placeOrder(Order orderDto, ArrayList<OrderDetail> orderDetailDtos) throws SQLException;
+    int saveOrder(Order order) throws SQLException;
     ArrayList<Order> getOrderByID(int orderID) throws SQLException;
     public ArrayList<Order> getOrderByDelID(String delID)throws SQLException;
     ArrayList<Order> getAllPendingOrders()throws SQLException;
-    boolean startProductionAndDeductIng(ObservableList<IngredientTM> ingredientTMObservableList, int order_id)throws SQLException;
     List<OrderTrend> getOrderTrends() throws SQLException;
+    boolean updateOrderDelivery(int deliveryID, int orderID) throws SQLException;
+    boolean updateOrderStatus(int orderId, String newStatus) throws SQLException;
 }

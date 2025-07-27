@@ -5,7 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
+import edu.ijse.BakeTrack.dao.SqlExecute;
 import edu.ijse.BakeTrack.dao.custom.OrderDetailDAO;
 import edu.ijse.BakeTrack.db.DBobject;
 import edu.ijse.BakeTrack.dto.OrderDetailDto;
@@ -61,6 +63,21 @@ public class OrderDetailDAOImpl implements OrderDetailDAO {
         }
 
         return orderDetailsList;
+    }
+
+    @Override
+    public boolean saveOrderDetails(List<OrderDetail> orderDetails, int orderId) throws SQLException {
+        String sql = "INSERT INTO order_detail (product_id, order_id, quantity, price_at_order) VALUES (?, ?, ?, ?)";
+        for (OrderDetail dto : orderDetails) {
+            boolean success = SqlExecute.SqlExecute(sql,
+                    dto.getProductID(),
+                    orderId,
+                    dto.getQuantity(),
+                    dto.getPriceAtOrder()
+            );
+            if (!success) return false;
+        }
+        return true;
     }
 
     public ArrayList<OrderDetail> getAll() {

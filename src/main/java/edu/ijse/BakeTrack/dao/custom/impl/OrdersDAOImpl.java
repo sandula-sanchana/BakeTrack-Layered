@@ -7,17 +7,14 @@ import java.util.List;
 import edu.ijse.BakeTrack.dao.custom.OrderDAO;
 import edu.ijse.BakeTrack.db.DBobject;
 import edu.ijse.BakeTrack.entity.Order;
-import edu.ijse.BakeTrack.entity.OrderDetail;
 import edu.ijse.BakeTrack.entity.OrderTrend;
-import edu.ijse.BakeTrack.tm.IngredientTM;
 import edu.ijse.BakeTrack.dao.SqlExecute;
-import javafx.collections.ObservableList;
 
-public class OrdersDAOImplT implements OrderDAO {
+public class OrdersDAOImpl implements OrderDAO {
 
     private Connection connection;
 
-    public OrdersDAOImplT() throws ClassNotFoundException, SQLException {
+    public OrdersDAOImpl() throws ClassNotFoundException, SQLException {
         this.connection = DBobject.getInstance().getConnection();
     }
 
@@ -80,79 +77,25 @@ public class OrdersDAOImplT implements OrderDAO {
     }
 
 
-    public String placeOrder(Order orderDto, ArrayList<OrderDetail> orderDetail) throws SQLException {
+    @Override
+    public int saveOrder(Order order) throws SQLException {
+        String sql = "INSERT INTO orders (customer_id, delivery_id, order_date, total_price, status) VALUES (?, ?, ?, ?, ?)";
+        PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        ps.setInt(1, order.getCustomerID());
+        ps.setNull(2, -1);
+        ps.setDate(3, Date.valueOf(order.getOrderDate()));
+        ps.setDouble(4, order.getTotalPrice());
+        ps.setString(5, order.getStatus());
 
-        connection=DBobject.getInstance().getConnection();
-
-           try{
-               connection.setAutoCommit(false);
-
-               String addSql = "INSERT INTO orders (customer_id,delivery_id,order_date,total_price,status) VALUES (?,?,?,?,?)";
-               PreparedStatement statement = connection.prepareStatement(addSql, Statement.RETURN_GENERATED_KEYS);
-               statement.setInt(1, orderDto.getCustomerID());
-               statement.setNull(2,-1);
-               statement.setDate(3, Date.valueOf(orderDto.getOrderDate()));
-               statement.setDouble(4, orderDto.getTotalPrice());
-               statement.setString(5, orderDto.getStatus());
-               statement.executeUpdate();
-
-               ResultSet resultSet=statement.getGeneratedKeys();
-               int orderId=-1;
-               if(resultSet.next()){
-                       orderId=resultSet.getInt(1);
-                   String orderDetailsql = "INSERT INTO order_detail (product_id, order_id, quantity, price_at_order) VALUES (?, ?, ?, ?)";
-                   boolean orderDetailsResult=true;
-                   for(OrderDetail orderDetailDto : orderDetail) {
-                       Boolean done=SqlExecute.SqlExecute(orderDetailsql,orderDetailDto.getProductID(), orderId,
-                               orderDetailDto.getQuantity(),orderDetailDto.getPriceAtOrder());
-                       if (!done){
-                           orderDetailsResult=false;
-                       }
-                   }
-
-                   if (orderDetailsResult){
-                       String Quantitysql = "UPDATE product SET total_quantity=(total_quantity-?) WHERE product_id = ?";
-                       boolean quantitySaved=true;
-                       for (OrderDetail orderDetailDto: orderDetail) {
-                           Boolean UpdateDone=SqlExecute.SqlExecute(Quantitysql,orderDetailDto.getQuantity(),orderDetailDto.getProductID());
-                         if(!UpdateDone){
-                             quantitySaved=false;
-                         }
-                       }
-                       if(quantitySaved){
-                             String paymentSql="INSERT INTO payments (order_id,price,payment_method,payment_date,status) VALUES (?,?,?,?,?)";
-                             Boolean paymentDone=SqlExecute.SqlExecute(paymentSql,orderId,orderDto.getTotalPrice(),null,null,"pending");
-
-                             if(paymentDone){
-                                 connection.commit();
-                                 return "setOrder done, payment pending";
-                             }else {
-                                 connection.rollback();
-                                 return "payment table set error";
-                             }
-                       }else{
-                           connection.rollback();
-                           return "Quantity update failed";
-                       }
-                   }else{
-                       connection.rollback();
-                       return  "order detail update error";
-                   }
-               }
-               else {
-                   connection.rollback();
-                   return "generated key not found";
-               }
-
-
-           } catch (Exception e) {
-               connection.rollback();
-               throw new RuntimeException(e);
-           }
-           finally {
-                connection.setAutoCommit(true);
-           }
+        if (ps.executeUpdate() > 0) {
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return -1;
     }
+
 
     public ArrayList<Order> getOrderByID(int orderID) throws SQLException{
         String query = "SELECT * FROM orders WHERE order_id=?";
@@ -237,47 +180,10 @@ public class OrdersDAOImplT implements OrderDAO {
         return ordersList;
     }
 
-    public boolean startProductionAndDeductIng(ObservableList<IngredientTM> ingredientTMObservableList, int order_id){
 
-        try {
-            connection.setAutoCommit(false);
-            String sql="UPDATE orders SET status=? WHERE order_id=?";
-
-            Boolean done=SqlExecute.SqlExecute(sql,"processing",order_id);
-
-            if(done){
-
-                String ingSql="UPDATE ingredient SET stock_amount=(stock_amount-?) WHERE ingredient_id=?";
-
-
-                for (IngredientTM ingredientTM: ingredientTMObservableList){
-                    int ingredient_id=ingredientTM.getIngredient_id();
-                    int needed_stock=ingredientTM.getTotal_amount_need();
-
-                    Boolean doneUpdate=SqlExecute.SqlExecute(ingSql,needed_stock,ingredient_id);
-
-                    if(!doneUpdate){
-                        connection.rollback();
-                        return false;
-                    }
-                }
-                     connection.commit();
-                    return true;
-
-            }else {
-                connection.rollback();
-                return false;
-            }
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }finally {
-            try {
-                connection.setAutoCommit(true);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
+    public boolean updateOrderStatus(int orderId, String newStatus) throws SQLException {
+        String sql = "UPDATE orders SET status = ? WHERE order_id = ?";
+        return SqlExecute.SqlExecute(sql, newStatus, orderId);
     }
 
     public List<OrderTrend> getOrderTrends() throws SQLException {
@@ -296,6 +202,17 @@ public class OrdersDAOImplT implements OrderDAO {
         }
 
         return trends;
+    }
+
+    @Override
+    public boolean updateOrderDelivery(int deliveryID, int orderID) throws SQLException {
+        String sql = "UPDATE orders SET delivery_id = ?, status = ? WHERE order_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, deliveryID);
+            ps.setString(2, "in transit");
+            ps.setInt(3, orderID);
+            return ps.executeUpdate() > 0;
+        }
     }
 
 

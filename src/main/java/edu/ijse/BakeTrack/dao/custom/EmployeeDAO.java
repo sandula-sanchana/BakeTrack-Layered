@@ -11,8 +11,6 @@ import edu.ijse.BakeTrack.entity.Employee;
 public interface EmployeeDAO extends CrudDAO<Employee> {
 
 
-    ArrayList<Employee> getAllAvailableAndNonAssinEmp() throws SQLException;
-
     ArrayList<Employee> getAllEmployeeNamesAndIds() throws SQLException;
 
     Double getSalaryById(int employeeId) throws SQLException;
