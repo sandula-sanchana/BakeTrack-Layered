@@ -1,11 +1,12 @@
 package edu.ijse.BakeTrack.bo.custom;
 
+import edu.ijse.BakeTrack.bo.SuperBO;
 import edu.ijse.BakeTrack.dto.SupplierDto;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public interface SupplierBO {
+public interface SupplierBO  extends SuperBO {
     String addSupplier(SupplierDto supplierDto) throws Exception;
 
     String deleteSupplier(int supplierId) throws Exception;

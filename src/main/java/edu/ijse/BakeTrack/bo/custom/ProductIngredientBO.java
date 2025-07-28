@@ -1,11 +1,12 @@
 package edu.ijse.BakeTrack.bo.custom;
 
+import edu.ijse.BakeTrack.bo.SuperBO;
 import edu.ijse.BakeTrack.dto.ProductIngredientDto;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public interface ProductIngredientBO {
+public interface ProductIngredientBO  extends SuperBO {
     ArrayList<ProductIngredientDto> getProductIngredientByPid(int productID) throws SQLException;
 
     ArrayList<ProductIngredientDto> getAll() throws Exception;

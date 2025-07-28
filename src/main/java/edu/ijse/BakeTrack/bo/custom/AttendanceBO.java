@@ -1,5 +1,6 @@
 package edu.ijse.BakeTrack.bo.custom;
 
+import edu.ijse.BakeTrack.bo.SuperBO;
 import edu.ijse.BakeTrack.dto.AttendanceCount;
 import edu.ijse.BakeTrack.dto.AttendanceDto;
 
@@ -8,7 +9,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface AttendanceBO {
+public interface AttendanceBO  extends SuperBO {
     String saveAttendance(AttendanceDto attendance)  throws SQLException;
 
     ArrayList<AttendanceDto> getAllAttendance() throws  SQLException;

@@ -1,11 +1,12 @@
 package edu.ijse.BakeTrack.bo.custom;
 
+import edu.ijse.BakeTrack.bo.SuperBO;
 import edu.ijse.BakeTrack.dto.UsersDto;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public interface UserBO {
+public interface UserBO  extends SuperBO {
 
     String addUser(UsersDto usersDto) throws Exception;
     String deleteUser(int user_id) throws Exception;

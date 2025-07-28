@@ -1,12 +1,13 @@
 package edu.ijse.BakeTrack.bo.custom;
 
+import edu.ijse.BakeTrack.bo.SuperBO;
 import edu.ijse.BakeTrack.dto.VehicleDto;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
 
-public interface VehicleBO {
+public interface VehicleBO  extends SuperBO {
 
     String addVehicle(VehicleDto vehicleDto) throws Exception;
 

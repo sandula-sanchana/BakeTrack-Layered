@@ -1,12 +1,13 @@
 package edu.ijse.BakeTrack.bo.custom;
 
+import edu.ijse.BakeTrack.bo.SuperBO;
 import edu.ijse.BakeTrack.dto.DeliveryDto;
 import edu.ijse.BakeTrack.entity.Delivery;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public interface DeliveryBO {
+public interface DeliveryBO  extends SuperBO {
 
 
     String deleteDelivery(int deliveryId) throws Exception;

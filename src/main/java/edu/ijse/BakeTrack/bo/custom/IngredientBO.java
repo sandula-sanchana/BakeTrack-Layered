@@ -1,11 +1,12 @@
 package edu.ijse.BakeTrack.bo.custom;
 
+import edu.ijse.BakeTrack.bo.SuperBO;
 import edu.ijse.BakeTrack.dto.IngredientDto;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public interface IngredientBO {
+public interface IngredientBO  extends SuperBO {
     String addIngredient(IngredientDto ingredientDto) throws Exception;
     String deleteIngredient(int ingredientId) throws Exception;
     String updateIngredient( IngredientDto ingredientDto) throws Exception;

@@ -1,5 +1,6 @@
 package edu.ijse.BakeTrack.bo.custom;
 
+import edu.ijse.BakeTrack.bo.SuperBO;
 import edu.ijse.BakeTrack.dto.OrderDetailDto;
 import edu.ijse.BakeTrack.dto.OrderDto;
 import edu.ijse.BakeTrack.dto.OrderTrendDto;
@@ -10,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface OrderBO {
+public interface OrderBO  extends SuperBO {
 
     public String updateOrder(OrderDto orderDto) throws Exception;
     public String deleteOrder(int orderId) throws Exception;
