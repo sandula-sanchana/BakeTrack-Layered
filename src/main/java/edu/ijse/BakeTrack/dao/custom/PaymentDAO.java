@@ -14,4 +14,5 @@ public interface PaymentDAO extends CrudDAO<Payment> {
     public String setPayments(Payment paymentsDto,int vehicle_id)throws SQLException;
     Map<String,Integer> getPaymentCount() throws SQLException;
     boolean insertPendingPayment(int orderId, double price) throws SQLException;
+    String updatePaymentStatus(Payment payment) throws SQLException;
 }

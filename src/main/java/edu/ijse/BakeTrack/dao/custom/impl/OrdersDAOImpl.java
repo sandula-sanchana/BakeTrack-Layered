@@ -76,6 +76,15 @@ public class OrdersDAOImpl implements OrderDAO {
         return ordersList;
     }
 
+    public String updateOrderStatusToDelivered(int orderId) throws SQLException {
+        String sql = "UPDATE orders SET status = ? WHERE order_id = ?";
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, "delivered");
+        statement.setInt(2, orderId);
+
+        return statement.executeUpdate() > 0 ? "OK" : "order status update error";
+    }
+
 
     @Override
     public int saveOrder(Order order) throws SQLException {

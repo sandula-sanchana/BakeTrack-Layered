@@ -20,4 +20,5 @@ public interface OrderDAO extends CrudDAO<Order> {
     List<OrderTrend> getOrderTrends() throws SQLException;
     boolean updateOrderDelivery(int deliveryID, int orderID) throws SQLException;
     boolean updateOrderStatus(int orderId, String newStatus) throws SQLException;
+    String updateOrderStatusToDelivered(int orderId) throws SQLException;
 }

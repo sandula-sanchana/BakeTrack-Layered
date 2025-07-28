@@ -19,4 +19,6 @@ public interface VehicleDAO extends CrudDAO<Vehicle> {
     Map<String, Integer> getVehicleStatusCount() throws  SQLException;
 
     boolean updateVehicleStatus(int vehicleID, String status) throws SQLException;
+
+    String updateVehicleStatusToAvailable(int vehicleId) throws SQLException;
 }

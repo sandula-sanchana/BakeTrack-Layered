@@ -50,7 +50,7 @@ public class DAOFactory {
                 return new EmployeeDAOImpl();
 
             case PAYMENT:
-                return new PaymentDAOImplT();
+                return new PaymentDAOImpl();
 
             case SYSTEM_SETTING:
                 return new SystemSettingDAOImpl();

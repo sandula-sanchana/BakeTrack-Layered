@@ -17,11 +17,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PaymentDAOImplT implements PaymentDAO {
+public class PaymentDAOImpl implements PaymentDAO {
 
     private Connection connection;
 
-    public PaymentDAOImplT() throws ClassNotFoundException, SQLException {
+    public PaymentDAOImpl() throws ClassNotFoundException, SQLException {
         this.connection= DBobject.getInstance().getConnection();
     }
 
@@ -196,6 +196,18 @@ public class PaymentDAOImplT implements PaymentDAO {
                   throw new RuntimeException(e);
               }
           }
+
+    }
+
+    public String updatePaymentStatus(Payment payment) throws SQLException {
+        String sql = "UPDATE payments SET payment_method=?, payment_date=?, status=? WHERE payment_id=?";
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, payment.getPaymentMethod());
+        statement.setDate(2, Date.valueOf(payment.getPaymentDate()));
+        statement.setString(3, payment.getStatus());
+        statement.setInt(4, payment.getPayment_id());
+
+        return statement.executeUpdate() > 0 ? "OK" : "update payment error";
     }
 
     public Map<String,Integer> getPaymentCount(){

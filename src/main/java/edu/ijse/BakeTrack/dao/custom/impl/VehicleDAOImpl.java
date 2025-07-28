@@ -55,6 +55,15 @@ public class VehicleDAOImpl implements VehicleDAO {
         return statusCountMap;
     }
 
+    public String updateVehicleStatusToAvailable(int vehicleId) throws SQLException {
+        String sql = "UPDATE vehicle SET status = ? WHERE vehicle_id = ?";
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, "available");
+        statement.setInt(2, vehicleId);
+
+        return statement.executeUpdate() > 0 ? "OK" : "vehicle status update error";
+    }
+
     @Override
     public boolean updateVehicleStatus(int vehicleID, String status) throws SQLException {
         String sql = "UPDATE vehicle SET status = ? WHERE vehicle_id = ?";
