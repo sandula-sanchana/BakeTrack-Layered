@@ -10,7 +10,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="apLoadingScreen" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #2C3E50;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.ijse.baketrack.controller.loadingScreenController">
+<StackPane fx:id="apLoadingScreen" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #2C3E50;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.ijse.BakeTrack.controller.loadingScreenController">
 
 
     <ImageView fitHeight="1080.0" fitWidth="1920.0" preserveRatio="false">

@@ -2,6 +2,7 @@
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextArea?>
@@ -15,9 +16,9 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="apSe" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #000;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.ijse.baketrack.controller.SendEmailAllController">
+<AnchorPane fx:id="apOrderPage" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #000;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.ijse.BakeTrack.controller.SupplierEmailSendController">
     <children>
-        <AnchorPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #F5F5DC;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <AnchorPane fx:id="apSE" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #F5F5DC;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
                 <ImageView fitHeight="1080.0" fitWidth="1920.0" pickOnBounds="true" preserveRatio="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <image>
@@ -41,7 +42,7 @@
                                 <DropShadow color="#00000033" offsetX="2.0" offsetY="2.0" radius="5.0" />
                             </effect>
                         </Button>
-                        <Label layoutX="680.0" layoutY="45.0" text="Send Email" textFill="#f39c12">
+                        <Label layoutX="640.0" layoutY="45.0" text="Send Email To Supplier" textFill="#f39c12">
                             <font>
                                 <Font size="58.0" />
                             </font>
@@ -50,21 +51,31 @@
                 </AnchorPane>
                 <Separator layoutY="147.0" prefHeight="18.0" prefWidth="1920.0" style="-fx-background-color: #000;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
 
-                <AnchorPane layoutX="250.0" layoutY="200.0" prefHeight="650.0" prefWidth="1420.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 20;" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="200.0">
+                <AnchorPane layoutX="250.0" layoutY="200.0" prefHeight="700.0" prefWidth="1420.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 20;" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="200.0">
                     <effect>
                         <DropShadow color="#00000033" offsetX="5.0" offsetY="5.0" radius="10.0" />
                     </effect>
                     <children>
-                        <VBox alignment="TOP_CENTER" prefHeight="610.0" prefWidth="1380.0" spacing="40.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+                        <VBox alignment="TOP_CENTER" prefHeight="660.0" prefWidth="1380.0" spacing="35.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
                             <children>
                                 <HBox alignment="CENTER_LEFT" spacing="30.0">
                                     <children>
-                                        <Label prefHeight="40.0" prefWidth="150.0" text="To:" textFill="#2c3e50">
+                                        <Label prefHeight="40.0" prefWidth="250.0" text="Select Supplier" textFill="#2c3e50">
                                             <font>
                                                 <Font size="26.0" />
                                             </font>
                                         </Label>
-                                        <TextField fx:id="txtEmail" prefHeight="50.0" prefWidth="1100.0" promptText="Enter email here" style="-fx-background-radius: 5;">
+                                        <ComboBox fx:id="cmbSupplier" onAction="#cmbSelected" prefHeight="50.0" prefWidth="1000.0" promptText="Select a supplier" style="-fx-background-radius: 5;" />
+                                    </children>
+                                </HBox>
+                                <HBox alignment="CENTER_LEFT" spacing="30.0">
+                                    <children>
+                                        <Label prefHeight="40.0" prefWidth="250.0" text="Supplier Email" textFill="#2c3e50">
+                                            <font>
+                                                <Font size="26.0" />
+                                            </font>
+                                        </Label>
+                                        <TextField fx:id="txtEmail" editable="false" prefHeight="50.0" prefWidth="1000.0" promptText="Email will appear here" style="-fx-background-radius: 5; -fx-background-color: #ECEFF1;">
                                             <font>
                                                 <Font size="20.0" />
                                             </font>
@@ -73,12 +84,12 @@
                                 </HBox>
                                 <HBox alignment="CENTER_LEFT" spacing="30.0">
                                     <children>
-                                        <Label prefHeight="40.0" prefWidth="150.0" text="Subject :" textFill="#2c3e50">
+                                        <Label prefHeight="40.0" prefWidth="250.0" text="Subject :" textFill="#2c3e50">
                                             <font>
                                                 <Font size="26.0" />
                                             </font>
                                         </Label>
-                                        <TextField fx:id="messageSUb" prefHeight="50.0" prefWidth="1100.0" style="-fx-background-radius: 5;">
+                                        <TextField fx:id="messageSUb" prefHeight="50.0" prefWidth="1000.0" style="-fx-background-radius: 5;">
                                             <font>
                                                 <Font size="20.0" />
                                             </font>
@@ -87,12 +98,12 @@
                                 </HBox>
                                 <HBox alignment="TOP_LEFT" spacing="30.0">
                                     <children>
-                                        <Label prefHeight="40.0" prefWidth="150.0" text="Message :" textFill="#2c3e50">
+                                        <Label prefHeight="40.0" prefWidth="250.0" text="Message :" textFill="#2c3e50">
                                             <font>
                                                 <Font size="26.0" />
                                             </font>
                                         </Label>
-                                        <TextArea fx:id="messageBody" prefHeight="250.0" prefWidth="1100.0" style="-fx-background-radius: 5;">
+                                        <TextArea fx:id="messageBody" prefHeight="250.0" prefWidth="1000.0" style="-fx-background-radius: 5;">
                                             <font>
                                                 <Font size="20.0" />
                                             </font>
@@ -119,7 +130,7 @@
                     </children>
                 </AnchorPane>
 
-                <Button layoutX="831.0" layoutY="880.0" mnemonicParsing="false" onAction="#btnSend" prefHeight="80.0" prefWidth="260.0" style="-fx-background-color: linear-gradient(to bottom, #2ecc71, #27ae60); -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-border-color: #27ae60; -fx-border-radius: 10;" text="SEND" AnchorPane.leftAnchor="831.0" AnchorPane.rightAnchor="829.0" AnchorPane.topAnchor="880.0">
+                <Button layoutX="831.0" layoutY="930.0" mnemonicParsing="false" onAction="#btnSend" prefHeight="80.0" prefWidth="260.0" style="-fx-background-color: linear-gradient(to bottom, #2ecc71, #27ae60); -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-border-color: #27ae60; -fx-border-radius: 10;" text="SEND" AnchorPane.leftAnchor="831.0" AnchorPane.rightAnchor="829.0" AnchorPane.topAnchor="930.0">
                     <font>
                         <Font size="30.0" />
                     </font>
