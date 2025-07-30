@@ -84,9 +84,7 @@ public class ProductDAOImpl implements ProductDAO {
 
     public Product getProductDetailsByProductID(int productID) throws SQLException {
         String sql = "SELECT * FROM product WHERE product_id=?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setInt(1,productID);
-        ResultSet resultSet = statement.executeQuery();
+        ResultSet resultSet = SqlExecute.SqlExecute(sql,productID);
 
         if (resultSet.next()) {
             return new Product(resultSet.getInt("product_id"),resultSet.getString("name"), resultSet.getString("category"),resultSet.getDouble("price"),resultSet.getInt("total_quantity"),
@@ -113,9 +111,7 @@ public class ProductDAOImpl implements ProductDAO {
         ArrayList<Product> productList = new ArrayList<>();
 
         try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
-
+            ResultSet resultSet =SqlExecute.SqlExecute(sql);
             while (resultSet.next()) {
                 Product product = new Product(
                         resultSet.getInt("product_id"),
@@ -138,11 +134,7 @@ public class ProductDAOImpl implements ProductDAO {
         String sql="SELECT price FROM product WHERE product_id=?";
 
         try {
-            PreparedStatement statement=connection.prepareStatement(sql);
-
-            statement.setInt(1,product_id);
-
-            ResultSet resultSet=statement.executeQuery();
+            ResultSet resultSet=SqlExecute.SqlExecute(sql,product_id);
 
             if (resultSet.next()){
                 return resultSet.getDouble("price");
@@ -157,15 +149,13 @@ public class ProductDAOImpl implements ProductDAO {
 
     public String getProductNameById(int productId) throws SQLException {
         String sql = "SELECT name FROM product WHERE product_id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, productId);
-            try (ResultSet resultSet = statement.executeQuery()) {
+            try (ResultSet resultSet = SqlExecute.SqlExecute(sql,productId)) {
                 if (resultSet.next()) {
                     return resultSet.getString("name");
                 } else {
                     return null;
                 }
-            }
+
         }
     }
 

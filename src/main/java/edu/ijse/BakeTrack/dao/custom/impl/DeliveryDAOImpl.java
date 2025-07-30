@@ -43,8 +43,8 @@ public class DeliveryDAOImpl implements DeliveryDAO {
         ArrayList<Delivery> unassignedDeliveries = new ArrayList<>();
 
         try {
-            PreparedStatement statement = connection.prepareStatement(query);
-            ResultSet resultSet = statement.executeQuery();
+
+            ResultSet resultSet = SqlExecute.SqlExecute(query);
 
             while (resultSet.next()) {
 
@@ -101,16 +101,15 @@ public class DeliveryDAOImpl implements DeliveryDAO {
     @Override
     public int getVehicleIDbyDelID(int delivery_id) throws SQLException {
         String sql = "SELECT vehicle_id FROM delivery WHERE delivery_id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, delivery_id);
-            try (ResultSet resultSet = statement.executeQuery()) {
+
+            try (ResultSet resultSet = SqlExecute.SqlExecute(sql, delivery_id)) {
                 if (resultSet.next()) {
                     return resultSet.getInt("vehicle_id");
                 } else {
                     throw new SQLException("No delivery found with ID: " + delivery_id);
                 }
             }
-        }
+
     }
 
     public ArrayList<Delivery> getAll()  {
@@ -118,8 +117,7 @@ public class DeliveryDAOImpl implements DeliveryDAO {
         ArrayList<Delivery> getall=new ArrayList<>();
 
         try {
-            PreparedStatement statement=connection.prepareStatement(allSql);
-            ResultSet resultSet=statement.executeQuery();
+            ResultSet resultSet=SqlExecute.SqlExecute(allSql);
 
             while (resultSet.next()){
                 getall.add(new Delivery(resultSet.getInt("delivery_id"),resultSet.getInt("vehicle_id"),resultSet.getInt("employee_id"),resultSet.getDate("delivery_date").toLocalDate(), resultSet.getString("area")));

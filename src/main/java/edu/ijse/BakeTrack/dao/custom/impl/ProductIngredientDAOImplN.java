@@ -10,11 +10,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class ProductIngredientDAOImpl implements ProductIngredientDAO {
+public class ProductIngredientDAOImplN implements ProductIngredientDAO {
 
     private Connection connection;
 
-    public ProductIngredientDAOImpl() throws ClassNotFoundException, SQLException {
+    public ProductIngredientDAOImplN() throws ClassNotFoundException, SQLException {
         this.connection= DBobject.getInstance().getConnection();
     }
 

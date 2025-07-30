@@ -79,49 +79,6 @@ public class AttendanceDAOImpl implements AttendanceDAO {
 
 
 
-
-    public void getAttendanceByEmployee(int employee_id, String status) throws SQLException {
-        String sql = "SELECT * FROM attendance WHERE employee_id = ? AND status=?";
-        ResultSet rs = null;
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, employee_id);
-            statement.setString(2, status);
-
-            rs = statement.executeQuery();
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-            throw new RuntimeException(e);
-        }
-        while (rs.next()) {
-            System.out.println("Date: " + rs.getDate("attend_date") +
-                    ", Check-in: " + rs.getTime("check_in_time") +
-                    ", Check-out: " + rs.getTime("check_out_time") +
-                    ", Status: " + rs.getString(("status")));
-        }
-    }
-
-    public void getAttendanceOnDate(LocalDate date, String status) throws SQLException {
-        String sql = "SELECT a.employee_id, e.emp_name, a.attend_date, a.check_in_time, a.check_out_time, a.status FROM attendance a INNER JOIN employee e ON a.employee_id = e.employee_id WHERE a.attend_date = ? AND a.status=?";
-
-        ResultSet rs = null;
-
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setDate(1, Date.valueOf(date));
-        statement.setString(2, status);
-
-        rs = statement.executeQuery();
-        while (rs.next())
-            System.out.println("Employee: " + rs.getString("emp_name") +
-                    " (ID: " + rs.getInt("employee_id") + ")" +
-                    ", Date: " + rs.getDate("attend_date") +
-                    ", Check-in: " + rs.getTime("check_in_time") +
-                    ", Check-out: " + rs.getTime("check_out_time") +
-                    ", Status: " + rs.getString("status"));
-
-    }
-
-
     public ArrayList<Attendance> getAll() throws SQLException {
         String allSql="SELECT * FROM attendance";
         ArrayList<Attendance> getall=new ArrayList<>();

@@ -23,13 +23,7 @@ public class OrderDetailDAOImpl implements OrderDetailDAO {
 
     public String save(OrderDetail orderDetailDto) throws SQLException {
         String sql = "INSERT INTO order_details (product_id, order_id, quantity, price_at_order) VALUES (?, ?, ?, ?)";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setInt(1, orderDetailDto.getProductID());
-        statement.setInt(2, orderDetailDto.getOrderID());
-        statement.setInt(3, orderDetailDto.getQuantity());
-        statement.setDouble(4, orderDetailDto.getPriceAtOrder());
-
-        int rowsAffected = statement.executeUpdate();
+        int rowsAffected = SqlExecute.SqlExecute(sql, orderDetailDto.getProductID(), orderDetailDto.getOrderID(), orderDetailDto.getQuantity(), orderDetailDto.getPriceAtOrder());
         return (rowsAffected > 0 )? "Order detail added successfully" : "Failed to add order detail";
     }
 
@@ -46,11 +40,8 @@ public class OrderDetailDAOImpl implements OrderDetailDAO {
 
     public ArrayList<OrderDetailDto> getOrderDetailsByOrderID(int order_id) throws SQLException {
         ArrayList<OrderDetailDto> orderDetailsList = new ArrayList<>();
-
         String sql = "SELECT * FROM order_detail WHERE order_id=?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setInt(1, order_id);
-        ResultSet resultSet = statement.executeQuery();
+        ResultSet resultSet = SqlExecute.SqlExecute(sql,order_id);
 
         while (resultSet.next()) {
             int productId = resultSet.getInt("product_id");
@@ -85,8 +76,8 @@ public class OrderDetailDAOImpl implements OrderDetailDAO {
         ArrayList<OrderDetail> orderDetailsList = new ArrayList<>();
 
         try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
+
+            ResultSet resultSet = SqlExecute.SqlExecute(sql);
 
             while (resultSet.next()) {
                 orderDetailsList.add(new OrderDetail(resultSet.getInt("product_id"),

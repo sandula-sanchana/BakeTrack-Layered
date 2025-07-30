@@ -69,8 +69,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         ArrayList<Employee> getall=new ArrayList<>();
 
         try {
-            PreparedStatement statement=connection.prepareStatement(allSql);
-            ResultSet resultSet=statement.executeQuery();
+            ResultSet resultSet=SqlExecute.SqlExecute(allSql);
 
             while (resultSet.next()){
                 getall.add(new Employee( resultSet.getInt("employee_id"),resultSet.getString("emp_name"),resultSet.getString("emp_address"),resultSet.getDouble("salary"), resultSet.getString("contact_no"),resultSet.getString("roles")));
@@ -120,8 +119,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         Map<String,Integer> countMap=new HashMap<>();
 
         try {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
+            ResultSet rs = SqlExecute.SqlExecute(sql);
 
             while(rs.next()){
                 String status = rs.getString("roles");

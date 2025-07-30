@@ -83,11 +83,7 @@ public class CustomerDAOImpl implements CustomerDAO {
     public Customer getCustomerByCOn(int cus_no) throws SQLException {
         connection=DBobject.getInstance().getConnection();
         String sql="SELECT * FROM customer WHERE contact_no=?";
-        PreparedStatement statement=connection.prepareStatement(sql);
-
-        statement.setInt(1,cus_no);
-
-        ResultSet resultSet=statement.executeQuery();
+        ResultSet resultSet=SqlExecute.SqlExecute(sql,cus_no);
 
         if(resultSet.next()){
             return new Customer(resultSet.getInt("customer_id"), resultSet.getString("name"),resultSet.getString("address"),resultSet.getString("contact_no"));

@@ -28,10 +28,7 @@ public class PaymentDAOImpl implements PaymentDAO {
 
     public String delete(int orderId) throws SQLException {
         String sql = "DELETE FROM payments WHERE order_id = ?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setInt(1, orderId);
-
-        int rowsAffected = statement.executeUpdate();
+        int rowsAffected = SqlExecute.SqlExecute(sql,orderId);
         if (rowsAffected > 0) {
             return "Payment deleted successfully";
         } else {
@@ -46,13 +43,7 @@ public class PaymentDAOImpl implements PaymentDAO {
 
     public String update(Payment payment) throws SQLException {
         String sql = "UPDATE payments SET status=?, payment_method = ?, payment_date = ? WHERE order_id = ?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setString(1, payment.getStatus());
-        statement.setString(2, payment.getPaymentMethod());
-        statement.setDate(3, Date.valueOf(payment.getPaymentDate()));
-        statement.setInt(4, payment.getOrderID());
-
-        int rowsAffected = statement.executeUpdate();
+        int rowsAffected = SqlExecute.SqlExecute(sql,payment.getStatus(),payment.getPaymentMethod(),Date.valueOf(payment.getPaymentDate()),payment.getOrderID());
         if (rowsAffected > 0) {
             return "Payment updated successfully";
         } else {
@@ -64,14 +55,10 @@ public class PaymentDAOImpl implements PaymentDAO {
         ArrayList<Payment> paymentsDtos = new ArrayList<>();
 
         try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, orderId);
-            ResultSet resultSet = statement.executeQuery();
-
+            ResultSet resultSet = SqlExecute.SqlExecute(sql,orderId);
             if (resultSet.next()) {
                 Date sqlDate = resultSet.getDate("payment_date");
                 LocalDate payDate = (sqlDate != null) ? sqlDate.toLocalDate() : null;
-
                 Payment paymentsDto = new Payment(
                         resultSet.getInt("payment_id"),
                         resultSet.getInt("order_id"),
@@ -96,8 +83,7 @@ public class PaymentDAOImpl implements PaymentDAO {
     public double getTotRevenue() throws SQLException {
         Double no_sales=0.0;
         String sql = "SELECT SUM(price) as Total_Revenue From payments";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        ResultSet resultSet = statement.executeQuery();
+        ResultSet resultSet = SqlExecute.SqlExecute(sql);
 
         if (resultSet.next()) {
             return resultSet.getDouble("total_revenue");
@@ -110,8 +96,8 @@ public class PaymentDAOImpl implements PaymentDAO {
         ArrayList<Payment> paymentsList = new ArrayList<>();
 
         try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
+
+            ResultSet resultSet = SqlExecute.SqlExecute(sql);
 
             while (resultSet.next()) {
                 Payment payment = new Payment(
@@ -131,83 +117,10 @@ public class PaymentDAOImpl implements PaymentDAO {
         return paymentsList;
     }
 
-    public String setPayments(Payment paymentsDto,int vehicle_id){
-          connection=DBobject.getInstance().getConnection();
-
-
-          try {
-              PreparedStatement statement= null;
-              try {
-                  connection.setAutoCommit(false);
-                  String PayUpdate="UPDATE payments SET payment_method=?,payment_date=?,status=? WHERE payment_id=?";
-                  statement = connection.prepareStatement(PayUpdate);
-                  statement.setString(1,paymentsDto.getPaymentMethod());
-                  statement.setDate(2,Date.valueOf(paymentsDto.getPaymentDate()));
-                  statement.setString(3,paymentsDto.getStatus());
-                  statement.setInt(4,paymentsDto.getPayment_id());
-              } catch (SQLException e) {
-                  throw new RuntimeException(e);
-              }
-
-              if(statement.executeUpdate()>0){
-                  PreparedStatement orderStatement= null;
-                  try {
-                      String orderStatus="UPDATE orders SET status=? WHERE order_id=?";
-                      orderStatement = connection.prepareStatement(orderStatus);
-                      orderStatement.setString(1,"delivered");
-                      orderStatement.setInt(2,paymentsDto.getOrderID());
-                  } catch (SQLException e) {
-                      throw new RuntimeException(e);
-                  }
-                  if(orderStatement.executeUpdate()>0){
-                      PreparedStatement vehiStatement= null;
-                      try {
-                          String vehicleSql="UPDATE vehicle SET status=? WHERE vehicle_id=?";
-                          vehiStatement = connection.prepareStatement(vehicleSql);
-                          vehiStatement.setString(1,"available");
-                          vehiStatement.setInt(2,vehicle_id);
-                      } catch (SQLException e) {
-                          throw new RuntimeException(e);
-                      }
-
-                      if(vehiStatement.executeUpdate()>0){
-                             connection.commit();
-                             return "set Payment Done";
-                         }else {
-                             connection.rollback();
-                             return "vehicle status error";
-                         }
-
-                   }else{
-                       connection.rollback();
-                       return "order Status Update error";
-                   }
-              }else{
-                 connection.rollback();
-                 return "update payment error";
-              }
-
-          } catch (Exception e) {
-              throw new RuntimeException(e);
-          } finally {
-              try {
-                  connection.setAutoCommit(true);
-              } catch (SQLException e) {
-                  throw new RuntimeException(e);
-              }
-          }
-
-    }
-
     public String updatePaymentStatus(Payment payment) throws SQLException {
         String sql = "UPDATE payments SET payment_method=?, payment_date=?, status=? WHERE payment_id=?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setString(1, payment.getPaymentMethod());
-        statement.setDate(2, Date.valueOf(payment.getPaymentDate()));
-        statement.setString(3, payment.getStatus());
-        statement.setInt(4, payment.getPayment_id());
-
-        return statement.executeUpdate() > 0 ? "OK" : "update payment error";
+        int done=SqlExecute.SqlExecute(sql,payment.getPaymentMethod(),Date.valueOf(payment.getPaymentDate()),payment.getStatus(),payment.getPayment_id());
+        return done > 0 ? "OK" : "update payment error";
     }
 
     public Map<String,Integer> getPaymentCount(){
@@ -216,9 +129,7 @@ public class PaymentDAOImpl implements PaymentDAO {
         Map<String,Integer> countMap=new HashMap<>();
 
         try {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-
+            ResultSet rs =SqlExecute.SqlExecute(sql);
             while(rs.next()){
                 String status = rs.getString("status");
                 int count = rs.getInt("count");

@@ -26,27 +26,14 @@ public class OrdersDAOImpl implements OrderDAO {
 
     public String update(Order orderDto) throws SQLException {
         String updateSql = "UPDATE orders SET customer_id=?, delivery_id=?, order_date=?, total_price=?, status=? WHERE order_id=?";
-
-        PreparedStatement statement = connection.prepareStatement(updateSql) ;
-            statement.setInt(1, orderDto.getCustomerID());
-            statement.setInt(2, orderDto.getDeliveryID());
-            statement.setDate(3, Date.valueOf(orderDto.getOrderDate()));
-            statement.setDouble(4, orderDto.getTotalPrice());
-            statement.setString(5, orderDto.getStatus());
-            statement.setInt(6, orderDto.getOrder_id());
-
-            int rowsAffected = statement.executeUpdate();
+            int rowsAffected = SqlExecute.SqlExecute(updateSql,orderDto.getCustomerID(),orderDto.getDeliveryID(),orderDto.getOrderDate(),orderDto.getTotalPrice(),orderDto.getStatus(),orderDto.getOrder_id());
             return (rowsAffected > 0 ? "Order updated successfully" : "Failed to update order");
         
     }
 
     public String delete(int orderId) throws SQLException {
         String deleteSql = "DELETE FROM orders WHERE order_id = ?";
-
-        PreparedStatement statement = connection.prepareStatement(deleteSql);
-            statement.setInt(1, orderId);
-
-            int rowsAffected = statement.executeUpdate();
+            int rowsAffected = SqlExecute.SqlExecute(deleteSql,orderId);
            return rowsAffected > 0 ? "Order & order_Detail,Payments deleted successfully" : "Failed to delete order";
         }
 
@@ -55,8 +42,8 @@ public class OrdersDAOImpl implements OrderDAO {
         ArrayList<Order> ordersList = new ArrayList<>();
 
         try {
-            PreparedStatement statement = connection.prepareStatement(query);
-            ResultSet rs = statement.executeQuery();
+
+            ResultSet rs = SqlExecute.SqlExecute(query);
 
             while (rs.next()) {
                 Order order = new Order(
@@ -78,11 +65,8 @@ public class OrdersDAOImpl implements OrderDAO {
 
     public String updateOrderStatusToDelivered(int orderId) throws SQLException {
         String sql = "UPDATE orders SET status = ? WHERE order_id = ?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setString(1, "delivered");
-        statement.setInt(2, orderId);
-
-        return statement.executeUpdate() > 0 ? "OK" : "order status update error";
+        int done=SqlExecute.SqlExecute(sql,"delivered",orderId);
+        return  done> 0 ? "OK" : "order status update error";
     }
 
 
@@ -111,11 +95,7 @@ public class OrdersDAOImpl implements OrderDAO {
         ArrayList<Order> ordersList = new ArrayList<>();
 
         try {
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setInt(1,orderID);
-
-            ResultSet rs = statement.executeQuery();
-
+            ResultSet rs = SqlExecute.SqlExecute(query,orderID);
             if (rs.next()) {
                 Order order = new Order(
                         rs.getInt("order_id"),
@@ -140,10 +120,7 @@ public class OrdersDAOImpl implements OrderDAO {
         ArrayList<Order> ordersList = new ArrayList<>();
 
         try {
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setInt(1,Integer.parseInt(delID));
-
-            ResultSet rs = statement.executeQuery();
+            ResultSet rs = SqlExecute.SqlExecute(query,delID);
 
             if (rs.next()) {
                 Order order = new Order(
@@ -196,11 +173,8 @@ public class OrdersDAOImpl implements OrderDAO {
     }
 
     public List<OrderTrend> getOrderTrends() throws SQLException {
-        Connection con = DBobject.getInstance().getConnection();
         String sql = "SELECT order_date, COUNT(*) AS order_count FROM orders GROUP BY order_date ORDER BY order_date";
-
-        PreparedStatement ps = con.prepareStatement(sql);
-        ResultSet rs = ps.executeQuery();
+        ResultSet rs = SqlExecute.SqlExecute(sql);
 
         List<OrderTrend> trends = new ArrayList<>();
         while (rs.next()) {
@@ -216,11 +190,11 @@ public class OrdersDAOImpl implements OrderDAO {
     @Override
     public boolean updateOrderDelivery(int deliveryID, int orderID) throws SQLException {
         String sql = "UPDATE orders SET delivery_id = ?, status = ? WHERE order_id = ?";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, deliveryID);
-            ps.setString(2, "in transit");
-            ps.setInt(3, orderID);
-            return ps.executeUpdate() > 0;
+        try {
+            int done=SqlExecute.SqlExecute(sql,deliveryID,"in transit",orderID);
+            return done > 0;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

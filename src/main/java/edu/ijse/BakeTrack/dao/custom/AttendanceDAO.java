@@ -11,10 +11,6 @@ import edu.ijse.BakeTrack.entity.AttendanceCountE;
 public interface AttendanceDAO extends CrudDAO<Attendance> {
 
 
-    void getAttendanceByEmployee(int employee_id, String status) throws SQLException;
-
-    void getAttendanceOnDate(LocalDate date, String status) throws SQLException;
-
     String deleteAttendance(int employeeID, LocalDate attendDate) throws SQLException;
 
     double getEmployeeTotalOTHours(int employeeId, int month, int year) throws SQLException;

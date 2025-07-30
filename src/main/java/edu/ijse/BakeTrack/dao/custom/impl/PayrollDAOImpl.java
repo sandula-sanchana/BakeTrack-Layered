@@ -25,8 +25,6 @@ public class PayrollDAOImpl implements PayrollDAO {
 
     public String save(Payroll payrollDto){
         String addSql = "INSERT INTO payroll (employee_id,pay_date,over_time_hours,base_salary,full_salary,status) VALUES (?,?,?,?,?,?)";
-
-
         Boolean done= null;
         try {
             done = SqlExecute.SqlExecute(addSql,payrollDto.getEmployee_id(), Date.valueOf(payrollDto.getPay_Date()),
@@ -64,8 +62,8 @@ public class PayrollDAOImpl implements PayrollDAO {
         ArrayList<Payroll> payrollList = new ArrayList<>();
 
         try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
+
+            ResultSet resultSet = SqlExecute.SqlExecute(sql);
 
             while (resultSet.next()) {
                 Payroll payroll = new Payroll(

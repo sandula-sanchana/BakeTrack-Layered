@@ -52,10 +52,7 @@ public class IngredientDAOImpl implements IngredientDAO {
 
     public String delete(int ingredientId) throws SQLException {
         String sql = "DELETE FROM ingredient WHERE ingredient_id = ?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setInt(1, ingredientId);
-
-        int rowsAffected = statement.executeUpdate();
+        int rowsAffected = SqlExecute.SqlExecute(sql,ingredientId);
         if (rowsAffected > 0) {
             return "Ingredient deleted successfully";
         } else {
@@ -80,10 +77,7 @@ public class IngredientDAOImpl implements IngredientDAO {
         ArrayList<Ingredient> getall=new ArrayList<>();
 
         try {
-            PreparedStatement statement=connection.prepareStatement(allSql);
-            ResultSet resultSet=statement.executeQuery();
-
-
+            ResultSet resultSet=SqlExecute.SqlExecute(allSql);
             while (resultSet.next()){
                 getall.add(new Ingredient( resultSet.getInt("ingredient_id"),resultSet.getString("name"), resultSet.getInt("stock_amount"),resultSet.getString("unit"), resultSet.getDouble("buying_price"),resultSet.getDate("expire_date").toLocalDate()));
             }
@@ -96,30 +90,26 @@ public class IngredientDAOImpl implements IngredientDAO {
 
     public String getIngredientNameById(int ingredientId) throws SQLException {
         String sql = "SELECT name FROM ingredient WHERE ingredient_id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, ingredientId);
-            try (ResultSet resultSet = statement.executeQuery()) {
+            try (ResultSet resultSet = SqlExecute.SqlExecute(sql,ingredientId)) {
                 if (resultSet.next()) {
                     return resultSet.getString("name");
                 } else {
                     return null;
                 }
-            }
+
         }
     }
 
     public int getStockById(int ingredientId) throws SQLException {
         String sql = "SELECT stock_amount FROM ingredient WHERE ingredient_id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, ingredientId);
-            try (ResultSet resultSet = statement.executeQuery()) {
+            try (ResultSet resultSet = SqlExecute.SqlExecute(sql,ingredientId)) {
                 if (resultSet.next()) {
                     return resultSet.getInt("stock_amount");
                 } else {
                     System.out.println("Ingredient not found");
                     return -1;
                 }
-            }
+
         }
     }
 
