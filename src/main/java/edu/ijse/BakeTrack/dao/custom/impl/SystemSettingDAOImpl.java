@@ -12,16 +12,9 @@ import java.util.ArrayList;
 
 public  class SystemSettingDAOImpl implements SystemSettingDAO {
 
-    private final Connection connection;
 
-    public SystemSettingDAOImpl() {
-        try {
-            this.connection = DBobject.getInstance().getConnection();
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-            throw new RuntimeException(e);
+    public SystemSettingDAOImpl() throws SQLException,ClassNotFoundException {
 
-        }
     }
 
     public int getOTRate(){
@@ -43,20 +36,12 @@ public  class SystemSettingDAOImpl implements SystemSettingDAO {
 
     public String setOTRate(int rate) throws SQLException {
         String sql = "UPDATE system_settings SET setting_value = ? WHERE setting_name = 'ot_rate'";
-
-        try (var preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setInt(1, rate);
-            int affectedRows = preparedStatement.executeUpdate();
-
+            int affectedRows = SqlExecute.SqlExecute(sql,rate);
             if (affectedRows > 0) {
                 return "OT rate updated successfully.";
             } else {
                 return "Failed to update OT rate. Record may not exist.";
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new SQLException("Error updating OT rate: " + e.getMessage(), e);
-        }
     }
 
     @Override

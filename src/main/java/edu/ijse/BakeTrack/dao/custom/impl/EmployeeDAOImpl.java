@@ -14,10 +14,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EmployeeDAOImpl implements EmployeeDAO {
-    private Connection connection;
+
 
     public EmployeeDAOImpl() throws ClassNotFoundException,SQLException{
-        this.connection= DBobject.getInstance().getConnection();
+
     }
 
     public String save(Employee employeeDto) throws SQLException{

@@ -80,7 +80,7 @@ public class DAOFactory {
                 return new ProductDAOImpl();
 
             case PRODUCT_INGREDIENT:
-                return new ProductIngredientDAOImplN();
+                return new ProductIngredientDAOImpl();
 
             case QUERY:
                 return new QueryDAOImpl();

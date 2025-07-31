@@ -8,6 +8,5 @@ import edu.ijse.BakeTrack.entity.SupplierIngredient;
 public interface SupplierIngredientDAO extends CrudDAO<SupplierIngredient> {
     String deleteSupplierIngredient(int ingredientId, int supplierId) throws SQLException;
 
-    void getSupplierIngredientByID(int ingredientId, int supplierId) throws SQLException;
 
 }

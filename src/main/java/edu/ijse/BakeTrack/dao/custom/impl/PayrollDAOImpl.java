@@ -17,10 +17,10 @@ import java.util.Map;
 
 
 public class PayrollDAOImpl implements PayrollDAO {
-    private Connection connection;
+
 
     public PayrollDAOImpl() throws ClassNotFoundException, SQLException {
-        this.connection= DBobject.getInstance().getConnection();
+
     }
 
     public String save(Payroll payrollDto){
@@ -49,11 +49,9 @@ public class PayrollDAOImpl implements PayrollDAO {
 
     public String delete(int payrollId) throws SQLException {
         String deleteSql = "DELETE FROM payroll WHERE payroll_id=?";
+           int done=SqlExecute.SqlExecute(deleteSql,payrollId);
+            return (done>0)? "Payroll deleted successfully" : "Failed to delete payroll";
 
-        try (PreparedStatement statement = connection.prepareStatement(deleteSql)) {
-           Boolean done=SqlExecute.SqlExecute(deleteSql,payrollId);
-            return (done? "Payroll deleted successfully" : "Failed to delete payroll");
-        }
     }
 
 

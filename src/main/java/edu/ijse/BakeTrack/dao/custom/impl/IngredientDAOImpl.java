@@ -16,10 +16,10 @@ import javafx.collections.ObservableList;
 
 public class IngredientDAOImpl implements IngredientDAO {
      
-    private Connection connection;
+
 
     public IngredientDAOImpl() throws ClassNotFoundException, SQLException {
-        this.connection= DBobject.getInstance().getConnection();
+
     }
 
      public String save(Ingredient ingredientDto) throws SQLException {

@@ -14,10 +14,10 @@ import edu.ijse.BakeTrack.entity.OrderDetail;
 import edu.ijse.BakeTrack.entity.Product;
 
 public class ProductDAOImpl implements ProductDAO {
-    private Connection connection;
+
 
     public ProductDAOImpl() throws ClassNotFoundException, SQLException {
-        this.connection= DBobject.getInstance().getConnection();
+
     }
 
     public String save(Product productDto) throws SQLException {

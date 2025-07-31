@@ -15,10 +15,10 @@ import edu.ijse.BakeTrack.entity.OrderDetail;
 
 public class OrderDetailDAOImpl implements OrderDetailDAO {
 
-    private Connection connection;
+
 
     public OrderDetailDAOImpl() throws ClassNotFoundException, SQLException {
-        this.connection= DBobject.getInstance().getConnection();
+
     }
 
     public String save(OrderDetail orderDetailDto) throws SQLException {

@@ -13,10 +13,10 @@ import java.sql.Connection;
 import java.util.ArrayList;
 
 public class CustomerDAOImpl implements CustomerDAO {
-    private Connection connection;
+
 
     public CustomerDAOImpl() throws ClassNotFoundException, SQLException {
-        this.connection= DBobject.getInstance().getConnection();
+
     }
 
     public String save(Customer customer) throws SQLException {
@@ -64,10 +64,7 @@ public class CustomerDAOImpl implements CustomerDAO {
         ArrayList<Customer> getall=new ArrayList<>();
 
         try {
-            PreparedStatement statement=connection.prepareStatement(allSql);
-            ResultSet resultSet=statement.executeQuery();
-
-
+            ResultSet resultSet=SqlExecute.SqlExecute(allSql);
             while (resultSet.next()){
                 getall.add(new Customer(resultSet.getInt("customer_id"),
                         resultSet.getString("name"),resultSet.getString("address"),
@@ -81,7 +78,6 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     public Customer getCustomerByCOn(int cus_no) throws SQLException {
-        connection=DBobject.getInstance().getConnection();
         String sql="SELECT * FROM customer WHERE contact_no=?";
         ResultSet resultSet=SqlExecute.SqlExecute(sql,cus_no);
 

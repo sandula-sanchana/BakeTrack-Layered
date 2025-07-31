@@ -12,16 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AttendanceDAOImpl implements AttendanceDAO {
-    private final Connection connection;
 
-    public AttendanceDAOImpl() {
-        try {
-            this.connection = DBobject.getInstance().getConnection();
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-            throw new RuntimeException(e);
 
-        }
+    public AttendanceDAOImpl()throws SQLException,ClassNotFoundException {
+
     }
 
     public String save(Attendance attendance) {

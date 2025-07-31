@@ -19,10 +19,10 @@ import java.util.Map;
 
 public class PaymentDAOImpl implements PaymentDAO {
 
-    private Connection connection;
+
 
     public PaymentDAOImpl() throws ClassNotFoundException, SQLException {
-        this.connection= DBobject.getInstance().getConnection();
+
     }
 
 
