@@ -23,8 +23,8 @@ public class OrderDetailDAOImpl implements OrderDetailDAO {
 
     public String save(OrderDetail orderDetailDto) throws SQLException {
         String sql = "INSERT INTO order_details (product_id, order_id, quantity, price_at_order) VALUES (?, ?, ?, ?)";
-        int rowsAffected = SqlExecute.SqlExecute(sql, orderDetailDto.getProductID(), orderDetailDto.getOrderID(), orderDetailDto.getQuantity(), orderDetailDto.getPriceAtOrder());
-        return (rowsAffected > 0 )? "Order detail added successfully" : "Failed to add order detail";
+        boolean rowsAffected = SqlExecute.SqlExecute(sql, orderDetailDto.getProductID(), orderDetailDto.getOrderID(), orderDetailDto.getQuantity(), orderDetailDto.getPriceAtOrder());
+        return (rowsAffected  )? "Order detail added successfully" : "Failed to add order detail";
     }
 
     @Override

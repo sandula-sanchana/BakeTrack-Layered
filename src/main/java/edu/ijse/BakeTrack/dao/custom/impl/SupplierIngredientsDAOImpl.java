@@ -21,19 +21,19 @@ public class SupplierIngredientsDAOImpl implements SupplierIngredientDAO {
 
     public String save(SupplierIngredient supplierIngredientDto) throws SQLException {
         String sql = "INSERT INTO supplier_ingredient (supplier_id, ingredient_id, price_per_unit, unit, last_order_date) VALUES (?, ?, ?, ?, ?)";
-        int rowsAffected = SqlExecute.SqlExecute(sql,supplierIngredientDto.getSupplier_id(),supplierIngredientDto.getIngredient_id(),
+        boolean rowsAffected = SqlExecute.SqlExecute(sql,supplierIngredientDto.getSupplier_id(),supplierIngredientDto.getIngredient_id(),
                 supplierIngredientDto.getPrice_per_unit(),supplierIngredientDto.getUnit(),Date.valueOf(supplierIngredientDto.getOrder_date()));
 
-        return rowsAffected > 0 ? "Supplier-Ingredient added successfully" : "Failed to add Supplier-Ingredient";
+        return rowsAffected ? "Supplier-Ingredient added successfully" : "Failed to add Supplier-Ingredient";
     }
 
 
     public String update(SupplierIngredient supplierIngredientDto) throws SQLException {
         String sql = "UPDATE supplier_ingredient SET price_per_unit = ?, unit = ?, last_order_date = ? WHERE ingredient_id = ? AND supplier_id = ?";
-        int rowsAffected = SqlExecute.SqlExecute(sql,supplierIngredientDto.getPrice_per_unit(),supplierIngredientDto.getUnit(),
+        boolean rowsAffected = SqlExecute.SqlExecute(sql,supplierIngredientDto.getPrice_per_unit(),supplierIngredientDto.getUnit(),
                 Date.valueOf(supplierIngredientDto.getOrder_date()), supplierIngredientDto.getIngredient_id(),supplierIngredientDto.getSupplier_id() );
 
-               return rowsAffected > 0 ? "Supplier-Ingredient updated successfully" : "Failed to update Supplier-Ingredient";
+               return rowsAffected ? "Supplier-Ingredient updated successfully" : "Failed to update Supplier-Ingredient";
     }
 
     @Override
@@ -43,8 +43,8 @@ public class SupplierIngredientsDAOImpl implements SupplierIngredientDAO {
 
     public String deleteSupplierIngredient(int ingredientId, int supplierId) throws SQLException {
         String sql = "DELETE FROM supplier_ingredient WHERE ingredient_id = ? AND supplier_id = ?";
-        int rowsAffected = SqlExecute.SqlExecute(sql,ingredientId,supplierId);
-        return rowsAffected > 0 ? "Supplier-Ingredient deleted successfully" : "Failed to delete Supplier-Ingredient";
+        boolean rowsAffected = SqlExecute.SqlExecute(sql,ingredientId,supplierId);
+        return rowsAffected ? "Supplier-Ingredient deleted successfully" : "Failed to delete Supplier-Ingredient";
     }
 
 

@@ -19,8 +19,8 @@ public class VehicleDAOImpl implements VehicleDAO {
 
     public String save(Vehicle vehicleDto) throws SQLException {
         String sql = "INSERT INTO vehicle (type, license_plate) VALUES (?, ?)";
-        int rowsAffected = SqlExecute.SqlExecute(sql, vehicleDto.getType(), vehicleDto.getLicensePlate());
-        return rowsAffected > 0 ? "Vehicle added successfully" : "Failed to add vehicle";
+        boolean rowsAffected = SqlExecute.SqlExecute(sql, vehicleDto.getType(), vehicleDto.getLicensePlate());
+        return rowsAffected ? "Vehicle added successfully" : "Failed to add vehicle";
     }
 
     public Map<String, Integer> getVehicleStatusCount() {
@@ -43,32 +43,32 @@ public class VehicleDAOImpl implements VehicleDAO {
 
     public String updateVehicleStatusToAvailable(int vehicleId) throws SQLException {
         String sql = "UPDATE vehicle SET status = ? WHERE vehicle_id = ?";
-        int rowsAffected = SqlExecute.SqlExecute(sql, "available", vehicleId);
-        return rowsAffected > 0 ? "OK" : "vehicle status update error";
+        boolean rowsAffected = SqlExecute.SqlExecute(sql, "available", vehicleId);
+        return rowsAffected  ? "OK" : "vehicle status update error";
     }
 
     @Override
     public boolean updateVehicleStatus(int vehicleID, String status) throws SQLException {
         String sql = "UPDATE vehicle SET status = ? WHERE vehicle_id = ?";
-        int rowsAffected = SqlExecute.SqlExecute(sql, status, vehicleID);
-        return rowsAffected > 0;
+        boolean rowsAffected = SqlExecute.SqlExecute(sql, status, vehicleID);
+        return rowsAffected ;
     }
 
     public String delete(int vehicleId) throws SQLException {
         String sql = "DELETE FROM vehicle WHERE vehicle_id = ?";
-        int rowsAffected = SqlExecute.SqlExecute(sql, vehicleId);
-        return rowsAffected > 0 ? "Vehicle deleted successfully" : "Failed to delete vehicle";
+        boolean rowsAffected = SqlExecute.SqlExecute(sql, vehicleId);
+        return rowsAffected ? "Vehicle deleted successfully" : "Failed to delete vehicle";
     }
 
     public String update(Vehicle vehicleDto) throws SQLException {
         String sql = "UPDATE vehicle SET type = ?, license_plate = ?, status = ? WHERE vehicle_id = ?";
-        int rowsAffected = SqlExecute.SqlExecute(sql,
+        boolean rowsAffected = SqlExecute.SqlExecute(sql,
                 vehicleDto.getType(),
                 vehicleDto.getLicensePlate(),
                 vehicleDto.getStatus(),
                 vehicleDto.getVehicle_id()
         );
-        return rowsAffected > 0 ? "Vehicle updated successfully" : "Failed to update vehicle";
+        return rowsAffected ? "Vehicle updated successfully" : "Failed to update vehicle";
     }
 
     public void getVehicleById(int vehicleId) throws SQLException {

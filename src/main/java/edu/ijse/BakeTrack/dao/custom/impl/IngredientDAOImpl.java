@@ -52,8 +52,8 @@ public class IngredientDAOImpl implements IngredientDAO {
 
     public String delete(int ingredientId) throws SQLException {
         String sql = "DELETE FROM ingredient WHERE ingredient_id = ?";
-        int rowsAffected = SqlExecute.SqlExecute(sql,ingredientId);
-        if (rowsAffected > 0) {
+        Boolean rowsAffected = SqlExecute.SqlExecute(sql,ingredientId);
+        if (rowsAffected ) {
             return "Ingredient deleted successfully";
         } else {
             return "Failed to delete ingredient";

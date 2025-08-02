@@ -26,15 +26,15 @@ public class OrdersDAOImpl implements OrderDAO {
 
     public String update(Order orderDto) throws SQLException {
         String updateSql = "UPDATE orders SET customer_id=?, delivery_id=?, order_date=?, total_price=?, status=? WHERE order_id=?";
-            int rowsAffected = SqlExecute.SqlExecute(updateSql,orderDto.getCustomerID(),orderDto.getDeliveryID(),orderDto.getOrderDate(),orderDto.getTotalPrice(),orderDto.getStatus(),orderDto.getOrder_id());
-            return (rowsAffected > 0 ? "Order updated successfully" : "Failed to update order");
+            boolean rowsAffected = SqlExecute.SqlExecute(updateSql,orderDto.getCustomerID(),orderDto.getDeliveryID(),orderDto.getOrderDate(),orderDto.getTotalPrice(),orderDto.getStatus(),orderDto.getOrder_id());
+            return (rowsAffected) ? "Order updated successfully" : "Failed to update order";
         
     }
 
     public String delete(int orderId) throws SQLException {
         String deleteSql = "DELETE FROM orders WHERE order_id = ?";
-            int rowsAffected = SqlExecute.SqlExecute(deleteSql,orderId);
-           return rowsAffected > 0 ? "Order & order_Detail,Payments deleted successfully" : "Failed to delete order";
+            boolean rowsAffected = SqlExecute.SqlExecute(deleteSql,orderId);
+           return rowsAffected ? "Order & order_Detail,Payments deleted successfully" : "Failed to delete order";
         }
 
     public ArrayList<Order> getAll() {
@@ -65,8 +65,8 @@ public class OrdersDAOImpl implements OrderDAO {
 
     public String updateOrderStatusToDelivered(int orderId) throws SQLException {
         String sql = "UPDATE orders SET status = ? WHERE order_id = ?";
-        int done=SqlExecute.SqlExecute(sql,"delivered",orderId);
-        return  done> 0 ? "OK" : "order status update error";
+        Boolean done=SqlExecute.SqlExecute(sql,"delivered",orderId);
+        return  done ? "OK" : "order status update error";
     }
 
 
@@ -191,8 +191,8 @@ public class OrdersDAOImpl implements OrderDAO {
     public boolean updateOrderDelivery(int deliveryID, int orderID) throws SQLException {
         String sql = "UPDATE orders SET delivery_id = ?, status = ? WHERE order_id = ?";
         try {
-            int done=SqlExecute.SqlExecute(sql,deliveryID,"in transit",orderID);
-            return done > 0;
+            boolean done=SqlExecute.SqlExecute(sql,deliveryID,"in transit",orderID);
+            return done ;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -28,8 +28,8 @@ public class PaymentDAOImpl implements PaymentDAO {
 
     public String delete(int orderId) throws SQLException {
         String sql = "DELETE FROM payments WHERE order_id = ?";
-        int rowsAffected = SqlExecute.SqlExecute(sql,orderId);
-        if (rowsAffected > 0) {
+        boolean rowsAffected = SqlExecute.SqlExecute(sql,orderId);
+        if (rowsAffected) {
             return "Payment deleted successfully";
         } else {
             return "Failed to delete payment";
@@ -43,8 +43,8 @@ public class PaymentDAOImpl implements PaymentDAO {
 
     public String update(Payment payment) throws SQLException {
         String sql = "UPDATE payments SET status=?, payment_method = ?, payment_date = ? WHERE order_id = ?";
-        int rowsAffected = SqlExecute.SqlExecute(sql,payment.getStatus(),payment.getPaymentMethod(),Date.valueOf(payment.getPaymentDate()),payment.getOrderID());
-        if (rowsAffected > 0) {
+        boolean rowsAffected = SqlExecute.SqlExecute(sql,payment.getStatus(),payment.getPaymentMethod(),Date.valueOf(payment.getPaymentDate()),payment.getOrderID());
+        if (rowsAffected) {
             return "Payment updated successfully";
         } else {
            return "Failed to update payment";
@@ -119,8 +119,8 @@ public class PaymentDAOImpl implements PaymentDAO {
 
     public String updatePaymentStatus(Payment payment) throws SQLException {
         String sql = "UPDATE payments SET payment_method=?, payment_date=?, status=? WHERE payment_id=?";
-        int done=SqlExecute.SqlExecute(sql,payment.getPaymentMethod(),Date.valueOf(payment.getPaymentDate()),payment.getStatus(),payment.getPayment_id());
-        return done > 0 ? "OK" : "update payment error";
+        boolean done=SqlExecute.SqlExecute(sql,payment.getPaymentMethod(),Date.valueOf(payment.getPaymentDate()),payment.getStatus(),payment.getPayment_id());
+        return done ? "OK" : "update payment error";
     }
 
     public Map<String,Integer> getPaymentCount(){

@@ -36,8 +36,8 @@ public  class SystemSettingDAOImpl implements SystemSettingDAO {
 
     public String setOTRate(int rate) throws SQLException {
         String sql = "UPDATE system_settings SET setting_value = ? WHERE setting_name = 'ot_rate'";
-            int affectedRows = SqlExecute.SqlExecute(sql,rate);
-            if (affectedRows > 0) {
+            boolean affectedRows = SqlExecute.SqlExecute(sql,rate);
+            if (affectedRows) {
                 return "OT rate updated successfully.";
             } else {
                 return "Failed to update OT rate. Record may not exist.";

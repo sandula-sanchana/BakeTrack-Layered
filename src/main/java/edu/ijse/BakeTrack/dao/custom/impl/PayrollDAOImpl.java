@@ -49,8 +49,8 @@ public class PayrollDAOImpl implements PayrollDAO {
 
     public String delete(int payrollId) throws SQLException {
         String deleteSql = "DELETE FROM payroll WHERE payroll_id=?";
-           int done=SqlExecute.SqlExecute(deleteSql,payrollId);
-            return (done>0)? "Payroll deleted successfully" : "Failed to delete payroll";
+           boolean done=SqlExecute.SqlExecute(deleteSql,payrollId);
+            return (done)? "Payroll deleted successfully" : "Failed to delete payroll";
 
     }
 

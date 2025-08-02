@@ -16,13 +16,13 @@ public class UsersDAOImpl implements UsersDAO {
 
     public String save(Users usersDto) throws SQLException {
         String sql = "INSERT INTO users (user_name, user_password, roles, email) VALUES (?, ?, ?, ?)";
-        int updates = SqlExecute.SqlExecute(sql,
+        boolean updates = SqlExecute.SqlExecute(sql,
                 usersDto.getUser_name(),
                 usersDto.getUser_password(),
                 usersDto.getRoles(),
                 usersDto.getEmail()
         );
-        return updates > 0 ? "User added" : "Fail";
+        return updates ? "User added" : "Fail";
     }
 
     public String getEmailByRole(String role) throws SQLException {
@@ -45,25 +45,25 @@ public class UsersDAOImpl implements UsersDAO {
 
     public String updatePasswordByRole(String role, String newPassword) throws SQLException {
         String sql = "UPDATE users SET user_password = ? WHERE roles = ?";
-        int rowsAffected = SqlExecute.SqlExecute(sql, newPassword, role);
-        return rowsAffected > 0 ? "Password updated successfully." : "Failed to update password.";
+        boolean rowsAffected = SqlExecute.SqlExecute(sql, newPassword, role);
+        return rowsAffected ? "Password updated successfully." : "Failed to update password.";
     }
 
     public String update(Users usersDto) throws SQLException {
         String sql = "UPDATE users SET user_name = ?, roles = ?, email = ? WHERE user_id = ?";
-        int rowsAffected = SqlExecute.SqlExecute(sql,
+        boolean rowsAffected = SqlExecute.SqlExecute(sql,
                 usersDto.getUser_name(),
                 usersDto.getRoles(),
                 usersDto.getEmail(),
                 usersDto.getUser_id()
         );
-        return rowsAffected > 0 ? "User updated successfully." : "Failed to update user.";
+        return rowsAffected ? "User updated successfully." : "Failed to update user.";
     }
 
     public String delete(int userId) throws SQLException {
         String sql = "DELETE FROM users WHERE user_id = ?";
-        int rowsAffected = SqlExecute.SqlExecute(sql, userId);
-        return rowsAffected > 0 ? "User deleted successfully." : "Failed to delete user.";
+        boolean rowsAffected = SqlExecute.SqlExecute(sql, userId);
+        return rowsAffected ? "User deleted successfully." : "Failed to delete user.";
     }
 
     public String authenticater(String user_name, String user_password) throws SQLException {
